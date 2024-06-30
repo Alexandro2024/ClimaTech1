@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ClimaTech - App de Orçamento</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-image: url('papel.avif');
+            background-size: cover;
+            background-position: center;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            text-align: center;
+            border: 10px solid;
+            border-image: linear-gradient(to right, #007BFF, #28A745) 1;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input, button, select {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        button {
+            background-color: #218838;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .list {
+            margin-bottom: 20px;
+        }
+        .list-item {
+            display: flex;
+            justify-content: space-between;
+            background-color: #f9f9f9;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+        .total {
+            font-weight: bold;
+            text-align: center;
+        }
+        .whatsapp-button {
+            background-color: #218838;
+            display: block;
+            width: 93.1%;
+            padding: 10px;
+            margin-top: 10px;
+            text-decoration: none;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .whatsapp-button:hover {
+            background-color: #1ebd54;
+        }
+        .logo {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+        }
+        h3 {
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="Blue Waves Surfing Club Logo.png" alt="ClimaTech Logo" class="logo">
+        <form id="budget-form">
+            <h3>Novo item 1</h3>
+            <select id="item-select-1" required>
+                <option value="">Selecione um item</option>
+                <option value="Outro item 1|10.00">Outro item 1 - R$10.00</option>
+                <option value="Outro item 2|15.00">Outro item 2 - R$15.00</option>
+                <option value="Outro item 3|20.00">Outro item 3 - R$20.00</option>
+                <option value="Outro item 4|25.00">Outro item 4 - R$25.00</option>
+                <option value="Outro item 5|30.00">Outro item 5 - R$30.00</option>
+            </select>
+
+            <h3>Novo item 2</h3>
+            <select id="item-select-2" required>
+                <option value="">Selecione um item</option>
+                <option value="Novo item 1|5.00">Novo item 1 - R$5.00</option>
+                <option value="Novo item 2|8.00">Novo item 2 - R$8.00</option>
+                <option value="Novo item 3|12.00">Novo item 3 - R$12.00</option>
+                <option value="Novo item 4|18.00">Novo item 4 - R$18.00</option>
+                <option value="Novo item 5|22.00">Novo item 5 - R$22.00</option>
+            </select>
+            
+            <h3>Novo item 3</h3>
+            <select id="item-select-3" required>
+                <option value="">Selecione um item</option>
+                <option value="Mais item 1|7.00">Mais item 1 - R$7.00</option>
+                <option value="Mais item 2|11.00">Mais item 2 - R$11.00</option>
+                <option value="Mais item 3|14.00">Mais item 3 - R$14.00</option>
+                <option value="Mais item 4|20.00">Mais item 4 - R$20.00</option>
+                <option value="Mais item 5|25.00">Mais item 5 - R$25.00</option>
+            </select>
+
+            <h3>Novo item 4</h3>
+            <select id="item-select-4" required>
+                <option value="">Selecione um item</option>
+                <option value="Último item 1|6.50">Último item 1 - R$6.50</option>
+                <option value="Último item 2|9.50">Último item 2 - R$9.50</option>
+                <option value="Último item 3|13.50">Último item 3 - R$13.50</option>
+                <option value="Último item 4|17.50">Último item 4 - R$17.50</option>
+                <option value="Último item 5|21.50">Último item 5 - R$21.50</option>
+            </select>
+
+            <button type="submit">Calcular Orçamento</button>
+        </form>
+        <div class="list" id="item-list"></div>
+        <div class="total" id="total"></div>
+        <a href="#" id="whatsapp-link" class="whatsapp-button">Pedido Via Whatsapp</a>
+    </div>
+
+    <script>
+        const form = document.getElementById('budget-form');
+        const itemList = document.getElementById('item-list');
+        const totalElement = document.getElementById('total');
+        const whatsappLink = document.getElementById('whatsapp-link');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            itemList.innerHTML = ''; // Limpa a lista antes de recalcular
+
+            let total = 0;
+            let message = 'Olá, gostaria de fazer um pedido de orçamento com os seguintes itens:\n\n';
+
+            // Loop através dos selects
+            for (let i = 1; i <= 4; i++) {
+                const select = document.getElementById('item-select-' + i);
+                const selectedOption = select.options[select.selectedIndex];
+                if (selectedOption.value !== '') {
+                    const [description, price] = selectedOption.value.split('|');
+                    total += parseFloat(price); // Converte o preço para float e adiciona ao total
+                    message += `${description} - R$ ${price}\n`;
+                    const listItem = document.createElement('div');
+                    listItem.classList.add('list-item');
+                    listItem.innerHTML = `
+                        <span>${description}</span>
+                        <span>R$ ${price}</span>
+                    `;
+                    itemList.appendChild(listItem);
+                }
+            }
+
+            const formattedTotal = total.toFixed(2);
+            message += `\nTotal: R$ ${formattedTotal}`; // Adiciona o total à mensagem
+
+            totalElement.textContent = `Total: R$ ${formattedTotal}`; // Formata o total com 2 casas decimais
+
+            // Atualiza o link do WhatsApp com a mensagem formatada
+            whatsappLink.href = `https://api.whatsapp.com/send?phone=5521971550633&text=${encodeURIComponent(message)}`;
+        });
+    </script>
+</body>
+</html>
