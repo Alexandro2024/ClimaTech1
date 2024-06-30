@@ -180,7 +180,7 @@
             totalElement.textContent = `Total: R$ ${formattedTotal}`; // Formata o total com 2 casas decimais
 
             // Atualiza o link do WhatsApp com a mensagem formatada
-            whatsappLink.href = `https://api.whatsapp.com/send?phone=5521971550633&text=${encodeURIComponent(message)}`;
+            whatsappLink.href = `https://api.whatsapp.com/send?&text=${encodeURIComponent(message)}`;
         });
     </script>
 </body>
